@@ -17,7 +17,7 @@ function save(){try{localStorage.setItem(FKEY,JSON.stringify(favorites))}catch(e
 function draw(){favLayer.clearLayers();for(var k in favorites){if(favorites[k]&&favorites[k].visible===false)continue;var g=groups.get(k),p=coords[k];if(!g||!valid(p))continue;L.circleMarker([p.lat,p.lon],{radius:10,color:'#b8860b',weight:4,fillColor:'#ffd700',fillOpacity:.85}).bindTooltip('★ '+g.municipio).addTo(favLayer)}}
 function renderList(){var list=document.getElementById('favList');if(!list)return;var ks=Object.keys(favorites);document.getElementById('favCount').textContent=ks.length;list.innerHTML=ks.length?'':'<p class="small">Sin favoritos marcados.</p>';ks.forEach(function(k){var g=groups.get(k);if(!g)return;var row=document.createElement('div');row.className='fav-item';var lab=document.createElement('label');var cb=document.createElement('input');cb.type='checkbox';cb.checked=favorites[k].visible!==false;cb.onchange=function(){favorites[k].visible=cb.checked;save()};var sp=document.createElement('span');sp.className='fav-star';sp.textContent='★ ';lab.appendChild(cb);lab.appendChild(sp);lab.appendChild(document.createTextNode(g.municipio+' · '+g.provincia));row.appendChild(lab);list.appendChild(row)})}
 function toggle(k){if(favorites[k])delete favorites[k];else favorites[k]={visible:true};save()}
-var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}';document.head.appendChild(st);
+var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}.popup-links p{margin:6px 0}';document.head.appendChild(st);
 var aside=document.querySelector('aside');
 var pend=document.getElementById('pendingTitle');
 var anchor=pend?pend.closest('details'):null;
@@ -27,6 +27,12 @@ aside.querySelectorAll('details').forEach(function(d){if(d.id!=='descPanel')d.op
 document.getElementById('favShowAll').onclick=function(){for(var k in favorites)favorites[k].visible=true;save()};
 document.getElementById('favHideAll').onclick=function(){for(var k in favorites)favorites[k].visible=false;save()};
 document.getElementById('favClear').onclick=function(){if(confirm('¿Eliminar todos los favoritos?')){favorites={};save()}};
+window.nearestLondon=function(p){var best=null;for(var i=0;i<APS.length;i++){var a=APS[i];if(!a.active)continue;if(!/londr|london/i.test(a.route||''))continue;var d=hav(p.lat,p.lon,a.lat,a.lon);if(!best||d<best.d)best=Object.assign({},a,{d:d})}return best||nearest(p)};
+window.popup=function(g,p,n){
+var nl=nearestLondon(p);
+var q=encodeURIComponent('Cuartel de la Guardia Civil, '+g.municipio+', '+g.provincia);
+var home=encodeURIComponent('Carretera de Benavente, 18, Valderas, 24220, León');
+return '<h3>'+esc(g.municipio)+'</h3>'+esc(g.provincia)+'<p>Vacantes: '+g.vacantes+' · BQ: '+g.bloqueadas+'</p>'+(n?'<p>Aeropuerto más cercano activo: '+esc(n.name)+' ('+n.code+')<br>'+n.d.toFixed(1)+' km en línea recta<br>'+esc(n.route)+'<br><a href="'+esc(n.source)+'" target="_blank" rel="noopener">Fuente de la ruta</a></p>':'<p>Sin aeropuertos activos.</p>')+(nl?'<p>Aeropuerto con vuelo a Londres más cercano: '+esc(nl.name)+' ('+nl.code+') · '+nl.d.toFixed(1)+' km</p>':'<p>No hay aeropuerto con vuelo a Londres identificado.</p>')+'<p class="small">Punto municipal; no ubicación exacta del puesto. '+esc(p.source||'Coordenadas importadas')+'</p><div class="popup-links"><p><strong>Localización Cuartel:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?q='+q+'">Apple Maps</a></p>'+(nl?'<p><strong>Ruta aeropuerto:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+p.lat+','+p.lon+'&destination='+nl.lat+','+nl.lon+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?saddr='+p.lat+','+p.lon+'&daddr='+nl.lat+','+nl.lon+'">Apple Maps</a></p>':'')+'<p><strong>Ruta a casa:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+p.lat+','+p.lon+'&destination='+home+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?saddr='+p.lat+','+p.lon+'&daddr='+home+'">Apple Maps</a></p></div><div class="scroll"><table><tr><th>Concurso</th><th>Unidad</th><th>Vac.</th><th>BQ</th><th>Pág.</th></tr>'+g.rows.map(function(r){return '<tr><td>'+r.concurso+'</td><td>'+esc(r.unidad)+'</td><td>'+r.vacantes+'</td><td>'+r.bloqueadas+'</td><td>'+r.pagina+'</td></tr>'}).join('')+'</table></div>'};
 function addBtn(c){if(c.querySelector('.fav-btn'))return;var h=c.querySelector('h3');if(!h)return;var m=h.textContent.trim(),prov='';for(var n=c.firstChild;n;n=n.nextSibling){if(n.nodeType===3&&n.textContent.trim()){prov=n.textContent.trim();break}}var k;try{k=key(m,prov)}catch(e){return}if(!groups.has(k))return;var b=document.createElement('button');b.className='fav-btn';var upd=function(){b.textContent=favorites[k]?'★ Quitar favorito':'☆ Añadir favorito'};upd();b.onclick=function(){toggle(k);upd()};c.appendChild(b)}
 new MutationObserver(function(){document.querySelectorAll('.leaflet-popup-content').forEach(addBtn)}).observe(document.body,{childList:true,subtree:true});
 $('save').onclick=function(){
@@ -43,7 +49,7 @@ var fn=doc.querySelector('#gc-favoritos');if(!fn){fn=document.createElement('scr
 fn.textContent=JSON.stringify(favorites);
 dl('mapa_gc_anual_con_coordenadas.html','<!doctype html>\n'+doc.outerHTML,'text/html;charset=utf-8');
 };
-draw();renderList();
+draw();renderList();refresh();
 }
 function wait(){if(window.L&&typeof refresh==='function'&&document.querySelector('.leaflet-container'))init();else setTimeout(wait,250)}
 wait();
