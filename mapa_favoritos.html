@@ -19,7 +19,11 @@ function renderList(){var list=document.getElementById('favList');if(!list)retur
 function toggle(k){if(favorites[k])delete favorites[k];else favorites[k]={visible:true};save()}
 var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}';document.head.appendChild(st);
 var aside=document.querySelector('aside');
-if(aside&&!document.getElementById('favPanel')){var det=document.createElement('details');det.id='favPanel';det.open=true;det.innerHTML='<summary>Favoritos (<span id="favCount">0</span>)</summary><div><button id="favShowAll">Mostrar todos</button><button id="favHideAll">Ocultar todos</button><button id="favClear">Vaciar favoritos</button></div><div id="favList" class="scroll"></div>';var pend=document.getElementById('pendingTitle');var anchor=pend?pend.closest('details'):aside.firstChild;aside.insertBefore(det,anchor)}
+var pend=document.getElementById('pendingTitle');
+var anchor=pend?pend.closest('details'):null;
+if(aside&&!document.getElementById('favPanel')){var det=document.createElement('details');det.id='favPanel';det.open=true;det.innerHTML='<summary>Favoritos (<span id="favCount">0</span>)</summary><div><button id="favShowAll">Mostrar todos</button><button id="favHideAll">Ocultar todos</button><button id="favClear">Vaciar favoritos</button></div><div id="favList" class="scroll"></div>';aside.insertBefore(det,anchor||null)}
+if(aside&&!document.getElementById('descPanel')){var fav=document.getElementById('favPanel');var desc=document.createElement('details');desc.id='descPanel';desc.open=true;var sum=document.createElement('summary');sum.textContent='Descripción';desc.appendChild(sum);var inner=document.createElement('div');while(aside.firstChild&&aside.firstChild!==fav){inner.appendChild(aside.firstChild)}desc.appendChild(inner);aside.insertBefore(desc,fav)}
+aside.querySelectorAll('details').forEach(function(d){if(d.id!=='descPanel')d.open=false});
 document.getElementById('favShowAll').onclick=function(){for(var k in favorites)favorites[k].visible=true;save()};
 document.getElementById('favHideAll').onclick=function(){for(var k in favorites)favorites[k].visible=false;save()};
 document.getElementById('favClear').onclick=function(){if(confirm('¿Eliminar todos los favoritos?')){favorites={};save()}};
@@ -34,6 +38,7 @@ doc.querySelector('#map').innerHTML='';
 doc.querySelector('#airports').innerHTML='';
 doc.querySelector('#load').removeAttribute('disabled');
 var p=doc.querySelector('#favPanel');if(p)p.remove();
+var dp=doc.querySelector('#descPanel');if(dp)dp.remove();
 var fn=doc.querySelector('#gc-favoritos');if(!fn){fn=document.createElement('script');fn.id='gc-favoritos';fn.type='application/json';doc.body.appendChild(fn)}
 fn.textContent=JSON.stringify(favorites);
 dl('mapa_gc_anual_con_coordenadas.html','<!doctype html>\n'+doc.outerHTML,'text/html;charset=utf-8');
