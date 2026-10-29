@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardia Civil · vacantes y BQ · favoritos</title>
+<style>body{margin:0;font:14px/1.45 system-ui}#boot{padding:20px}</style>
+</head><body><div id="boot">Cargando mapa con favoritos…</div>
+<script>
+const SRC='https://raw.githubusercontent.com/kd9c9zhyht-lab/guardia-civil-vacantes-mapa/main/mapa_gc_aeropuertos_anuales.html';
+const REPS=[
+[`</style>`,`\n.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}\n.fav-star{color:#b8860b}\n.fav-btn{width:100%;margin-top:6px}\n</style>`],
+[`<label><input id="zero" type="checkbox"> Destinos sin plazas iniciales (0/0)</label>`,`<label><input id="zero" type="checkbox"> Destinos sin plazas iniciales (0/0)</label>\n<details open><summary>Favoritos (<span id="favCount">0</span>)</summary><div><button id="favShowAll">Mostrar todos</button><button id="favHideAll">Ocultar todos</button><button id="favClear">Vaciar favoritos</button></div><div id="favList" class="scroll"></div></details>`],
+[`let coords=JSON.parse($('embedded-coordinates').textContent),audit=JSON.parse($('coordinate-audit').textContent),map,layer,loading=false;`,`let coords=JSON.parse($('embedded-coordinates').textContent),audit=JSON.parse($('coordinate-audit').textContent),map,layer,favLayer,loading=false,favorites={};try{favorites=JSON.parse(localStorage.getItem('gc-favoritos-v1')||'{}')}catch(e){}`],
+[`function popup(g,p,n){`,`function saveFavs(){try{localStorage.setItem('gc-favoritos-v1',JSON.stringify(favorites))}catch(e){}renderFavs()}\nfunction toggleFav(k){if(favorites[k])delete favorites[k];else favorites[k]={visible:true};saveFavs();refresh()}\nfunction renderFavs(){let list=$('favList');if(!list)return;let items=Object.keys(favorites);$('favCount').textContent=items.length;list.innerHTML=items.length?'':'<p class="small">Sin favoritos marcados.</p>';for(const k of items){let g=groups.get(k);if(!g)continue;let row=document.createElement('div');row.className='fav-item';row.innerHTML='<label><input type="checkbox" '+(favorites[k].visible===false?'':'checked')+'><span class="fav-star">★</span> '+esc(g.municipio)+' · '+esc(g.provincia)+'</label>';row.querySelector('input').onchange=e=>{favorites[k].visible=e.target.checked;saveFavs();refresh()};list.append(row)}}\nfunction popup(g,p,n){`],
+[`r.pagina+'</td></tr>').join('')+'</table></div>'}`,`r.pagina+'</td></tr>').join('')+'</table></div><button class="fav-btn" data-key="'+g.key+'">'+(favorites[g.key]?'★ Quitar favorito':'☆ Añadir favorito')+'</button>'}`],
+[`layer=L.layerGroup().addTo(map);`,`layer=L.layerGroup().addTo(map);favLayer=L.layerGroup().addTo(map);map.on('popupopen',e=>{let b=e.popup.getElement()?.querySelector('.fav-btn');if(b)b.onclick=()=>{toggleFav(b.dataset.key);map.closePopup()}});`],
+[`state((groups.size-absent.length)+'/'`,`favLayer.clearLayers();for(const k in favorites){if(favorites[k].visible===false)continue;let g=groups.get(k),p=coords[k];if(!g||!valid(p))continue;L.circleMarker([p.lat,p.lon],{radius:10,color:'#b8860b',weight:4,fillColor:'#ffd700',fillOpacity:.85}).bindTooltip('★ '+esc(g.municipio)).bindPopup(popup(g,p,nearest(p)),{maxWidth:570}).addTo(favLayer)}renderFavs();state((groups.size-absent.length)+'/'`],
+[`for(const id of ['search','vac','bq','zero'])$(id).addEventListener('input',refresh);`,`for(const id of ['search','vac','bq','zero'])$(id).addEventListener('input',refresh);\n$('favShowAll').onclick=()=>{for(const k in favorites)favorites[k].visible=true;saveFavs();refresh()};\n$('favHideAll').onclick=()=>{for(const k in favorites)favorites[k].visible=false;saveFavs();refresh()};\n$('favClear').onclick=()=>{if(confirm('¿Eliminar todos los favoritos?')){favorites={};saveFavs();refresh()}};`]
+];
+fetch(SRC).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.text()}).then(html=>{
+ for(const [a,b] of REPS){if(!html.includes(a))console.warn('Ancla no encontrada:',a.slice(0,60));html=html.split(a).join(b)}
+ document.open();document.write(html);document.close();
+}).catch(e=>{document.getElementById('boot').textContent='No se pudo cargar el mapa: '+e.message});
+</script>
+</body></html>
