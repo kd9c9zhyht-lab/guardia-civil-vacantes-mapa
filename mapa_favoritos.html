@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardia Civil · vacantes y BQ · favoritos</title>
+<style>html,body{margin:0;height:100%}iframe{border:0;width:100%;height:100%}#err{padding:16px;font:14px system-ui}</style>
+</head><body>
+<iframe id="f" title="Mapa Guardia Civil con favoritos" src="https://kd9c9zhyht-lab.github.io/guardia-civil-vacantes-mapa/mapa_gc_aeropuertos_anuales.html?v=3"></iframe>
+<div id="err" hidden></div>
+<script type="text/plain" id="favsrc">
+(function(){
+if(window.__gcFav)return;window.__gcFav=true;
+var FKEY='gc-favoritos-v1';
+var favorites={};try{favorites=JSON.parse(localStorage.getItem(FKEY)||'{}')}catch(e){}
+var favLayer=L.layerGroup().addTo(map);
+function save(){try{localStorage.setItem(FKEY,JSON.stringify(favorites))}catch(e){}renderList();draw()}
+function draw(){favLayer.clearLayers();for(var k in favorites){if(favorites[k]&&favorites[k].visible===false)continue;var g=groups.get(k),p=coords[k];if(!g||!valid(p))continue;L.circleMarker([p.lat,p.lon],{radius:10,color:'#b8860b',weight:4,fillColor:'#ffd700',fillOpacity:.85}).bindTooltip('★ '+g.municipio).addTo(favLayer)}}
+function renderList(){var list=document.getElementById('favList');if(!list)return;var ks=Object.keys(favorites);document.getElementById('favCount').textContent=ks.length;list.innerHTML=ks.length?'':'<p class="small">Sin favoritos marcados.</p>';ks.forEach(function(k){var g=groups.get(k);if(!g)return;var row=document.createElement('div');row.className='fav-item';var lab=document.createElement('label');var cb=document.createElement('input');cb.type='checkbox';cb.checked=favorites[k].visible!==false;cb.onchange=function(){favorites[k].visible=cb.checked;save()};var sp=document.createElement('span');sp.className='fav-star';sp.textContent='★ ';lab.appendChild(cb);lab.appendChild(sp);lab.appendChild(document.createTextNode(g.municipio+' · '+g.provincia));row.appendChild(lab);list.appendChild(row)})}
+function toggle(k){if(favorites[k])delete favorites[k];else favorites[k]={visible:true};save()}
+var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}';document.head.appendChild(st);
+var aside=document.querySelector('aside');
+if(aside){var det=document.createElement('details');det.open=true;det.innerHTML='<summary>Favoritos (<span id="favCount">0</span>)</summary><div><button id="favShowAll">Mostrar todos</button><button id="favHideAll">Ocultar todos</button><button id="favClear">Vaciar favoritos</button></div><div id="favList" class="scroll"></div>';aside.insertBefore(det,aside.firstChild)}
+document.getElementById('favShowAll').onclick=function(){for(var k in favorites)favorites[k].visible=true;save()};
+document.getElementById('favHideAll').onclick=function(){for(var k in favorites)favorites[k].visible=false;save()};
+document.getElementById('favClear').onclick=function(){if(confirm('¿Eliminar todos los favoritos?')){favorites={};save()}};
+function addBtn(c){if(c.querySelector('.fav-btn'))return;var h=c.querySelector('h3');if(!h)return;var m=h.textContent.trim(),prov='';for(var n=c.firstChild;n;n=n.nextSibling){if(n.nodeType===3&&n.textContent.trim()){prov=n.textContent.trim();break}}var k;try{k=key(m,prov)}catch(e){return}if(!groups.has(k))return;var b=document.createElement('button');b.className='fav-btn';var upd=function(){b.textContent=favorites[k]?'★ Quitar favorito':'☆ Añadir favorito'};upd();b.onclick=function(){toggle(k);upd()};c.appendChild(b)}
+new MutationObserver(function(){document.querySelectorAll('.leaflet-popup-content').forEach(addBtn)}).observe(document.body,{childList:true,subtree:true});
+draw();renderList();
+})();
+</script>
+<script>
+var f=document.getElementById('f'),err=document.getElementById('err'),tries=0;
+function showErr(m){err.hidden=false;err.textContent=m}
+f.addEventListener('load',function(){tries=0;var t=setInterval(function(){
+ var d=f.contentDocument,w=f.contentWindow;
+ if(!d||!w){clearInterval(t);showErr('No se pudo acceder al mapa.');return}
+ if(w.__gcFav){clearInterval(t);return}
+ if(w.L&&typeof w.refresh==='function'&&d.querySelector('.leaflet-container')){
+  clearInterval(t);
+  try{var s=d.createElement('script');s.textContent=document.getElementById('favsrc').textContent;d.body.appendChild(s)}catch(e){showErr('Error al activar favoritos: '+e.message)}
+ }else if(++tries>40){clearInterval(t);showErr('El mapa tardó demasiado en inicializarse.')}
+},250)});
+</script>
+</body></html>
