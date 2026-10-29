@@ -20,7 +20,66 @@ function saveCuarteles(){try{localStorage.setItem(CKEY,JSON.stringify(cuarteles)
 function draw(){favLayer.clearLayers();for(var k in favorites){if(favorites[k]&&favorites[k].visible===false)continue;var g=groups.get(k),p=coords[k];if(!g||!valid(p))continue;L.circleMarker([p.lat,p.lon],{radius:10,color:'#b8860b',weight:4,fillColor:'#ffd700',fillOpacity:.85}).bindTooltip('★ '+g.municipio).addTo(favLayer)}}
 function renderList(){var list=document.getElementById('favList');if(!list)return;var ks=Object.keys(favorites);document.getElementById('favCount').textContent=ks.length;list.innerHTML=ks.length?'':'<p class="small">Sin favoritos marcados.</p>';ks.forEach(function(k){var g=groups.get(k);if(!g)return;var row=document.createElement('div');row.className='fav-item';var lab=document.createElement('label');var cb=document.createElement('input');cb.type='checkbox';cb.checked=favorites[k].visible!==false;cb.onchange=function(){favorites[k].visible=cb.checked;saveFavs()};var sp=document.createElement('span');sp.className='fav-star';sp.textContent='★ ';lab.appendChild(cb);lab.appendChild(sp);lab.appendChild(document.createTextNode(g.municipio+' · '+g.provincia));row.appendChild(lab);list.appendChild(row)})}
 function toggle(k){if(favorites[k])delete favorites[k];else favorites[k]={visible:true};saveFavs()}
-var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}.popup-links p{margin:6px 0}.popup-contact{margin-top:10px;padding-top:8px;border-top:1px solid #ddd}.popup-contact h4{margin:0 0 6px}.popup-contact p{margin:4px 0;font-size:13px}';document.head.appendChild(st);
+function fechaEspagnola(){
+  var d=new Date();
+  var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear();
+}
+
+function primeraVacante(g){
+  if(!g.rows||!g.rows.length)return null;
+  for(var i=0;i<g.rows.length;i++){
+    if(Number(g.rows[i].vacantes)>0)return g.rows[i];
+  }
+  return g.rows[0];
+}
+
+function buildEmailBody(g,r){
+  var c=CONTACTS[g.provincia]||{};
+  var fecha=fechaEspagnola();
+  return 'A la atención del Ilmo. Sr. Coronel Jefe de la Comandancia de '+g.provincia+'\n\n'+
+  'Asunto: Solicitud de información sobre régimen de jornada, horario y turnos de vacante anunciada.\n\n'+
+  'D./Dña. Ruth Fernandez Ramos, con DNI/NIE [NÚMERO], con destino actual en [UNIDAD Y LOCALIDAD], en calidad de guardia civil de la Escala de Cabos y Guardias, con número de empleado [SI SE DISPONE], respetuosamente expone:\n\n'+
+  'Que, con carácter previo a la solicitud de la vacante anunciada en el BOGC núm. 87, de 27 de octubre de 2026, Resolución 2630008, desea conocer el régimen de prestación del servicio del siguiente puesto:\n\n'+
+  '• Puesto: '+r.unidad+'\n'+
+  '• Localidad / residencia: '+g.municipio+' ('+g.provincia+')\n'+
+  '• Concurso: '+r.concurso+'\n'+
+  '• Puntos de la vacante: '+(r.puntos||'No disponible')+'\n\n'+
+  'Al amparo del artículo 28.3 de la Ley Orgánica 11/2007, de 22 de octubre, reguladora de los derechos y deberes de los miembros de la Guardia Civil, solicita que se le informe, con la mayor precisión posible, de los siguientes extremos:\n\n'+
+  '1. Régimen de prestación del servicio del puesto: ordinario, a turnos u otro.\n'+
+  '2. Tramos horarios habituales, indicando, en su caso, mañana, tarde y noche, y su duración.\n'+
+  '3. Cadencia o secuencia de turnos, si el puesto se presta a turnos.\n'+
+  '4. Si el horario o cuadrante varía a lo largo del año, especialmente entre invierno y verano o por estacionalidad turística.\n'+
+  '5. Antelación con la que se comunica el cuadrante o el servicio diario.\n'+
+  '6. Si el puesto forma parte de un núcleo operativo, sistema de turnos o cuadrante común con otras unidades.\n\n'+
+  'Este correo no supone la presentación de una solicitud de destino ni compromete su realización; únicamente expresa interés preliminar en la vacante y solicitud de información.\n\n'+
+  'Esta información se solicita exclusivamente para valorar la solicitud de la vacante y ejercer el derecho reconocido en el artículo 28.3 de la Ley Orgánica 11/2007.\n\n'+
+  'Por lo expuesto, solicita se tenga por presentada esta instancia y se le facilite respuesta escrita a la mayor brevedad.\n\n'+
+  'En Valderas, a '+fecha+'.\n\n'+
+  'Fdo.: Ruth Fernandez Ramos';
+}
+
+function sendVacancyEmail(g){
+  var r=primeraVacante(g);
+  if(!r){alert('No hay datos de vacante disponibles para esta localidad.');return}
+  var c=CONTACTS[g.provincia]||{};
+  if(!c.correo){alert('No hay correo de Comandancia disponible para '+g.provincia+'.');return}
+  var mensaje='¿Abrir el borrador de correo para esta vacante?\n\n'+
+    'Localidad: '+g.municipio+' ('+g.provincia+')\n'+
+    'Puesto: '+r.unidad+'\n'+
+    'Concurso: '+r.concurso+'\n'+
+    'Vacantes: '+r.vacantes+'\n'+
+    'Puntos: '+(r.puntos||'No disponible')+'\n'+
+    'Destinatario: '+c.correo+'\n\n'+
+    'Este correo no presentará automáticamente la solicitud; solo abrirá un borrador para tu revisión y envío.';
+  if(!confirm(mensaje))return;
+  var asunto='Solicitud de información sobre régimen de jornada, horario y turnos de vacante anunciada';
+  var cuerpo=buildEmailBody(g,r);
+  var url='mailto:'+c.correo+'?subject='+encodeURIComponent(asunto)+'&body='+encodeURIComponent(cuerpo);
+  window.location.href=url;
+}
+
+var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}.popup-links p{margin:6px 0}.email-btn{margin-top:6px;background:#f3f6ff;border-color:#4a6fdc;color:#24418c}.popup-contact{margin-top:10px;padding-top:8px;border-top:1px solid #ddd}.popup-contact h4{margin:0 0 6px}.popup-contact p{margin:4px 0;font-size:13px}';document.head.appendChild(st);
 var aside=document.querySelector('aside');
 var pend=document.getElementById('pendingTitle');
 var anchor=pend?pend.closest('details'):null;
@@ -43,7 +102,12 @@ var c=CONTACTS[g.provincia]||null;
 var q=encodeURIComponent(addr||('Cuartel de la Guardia Civil, '+g.municipio+', '+g.provincia));
 var home=encodeURIComponent('Carretera de Benavente, 18, Valderas, 24220, León');
 return '<h3>'+esc(g.municipio)+'</h3>'+esc(g.provincia)+'<p>Vacantes: '+g.vacantes+' · BQ: '+g.bloqueadas+'</p>'+(n?'<p>Aeropuerto más cercano activo: '+esc(n.name)+' ('+n.code+')<br>'+n.d.toFixed(1)+' km en línea recta<br>'+esc(n.route)+'<br><a href="'+esc(n.source)+'" target="_blank" rel="noopener">Fuente de la ruta</a></p>':'<p>Sin aeropuertos activos.</p>')+'<p class="small">Punto municipal; no ubicación exacta del puesto. '+esc(p.source||'Coordenadas importadas')+'</p><div class="popup-links"><p><strong>1. Localización Cuartel:</strong> '+(addr?esc(addr)+' · ':'')+'<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?q='+q+'">Apple Maps</a></p>'+(n?'<p><strong>2. Ruta aeropuerto:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+p.lat+','+p.lon+'&destination='+n.lat+','+n.lon+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?saddr='+p.lat+','+p.lon+'&daddr='+n.lat+','+n.lon+'">Apple Maps</a></p>':'')+'<p><strong>3. Ruta a casa:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+p.lat+','+p.lon+'&destination='+home+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?saddr='+p.lat+','+p.lon+'&daddr='+home+'">Apple Maps</a></p></div><div class="popup-contact"><h4>Detalles de contacto de la comandancia</h4><p><strong>Correo electrónico:</strong> '+(c&&c.correo?'<a href="mailto:'+esc(c.correo)+'">'+esc(c.correo)+'</a>':'No disponible')+'</p><p><strong>Teléfono:</strong> '+(c&&c.telefono?'<a href="tel:+34'+String(c.telefono).replace(/[^0-9]/g,'')+'">'+esc(c.telefono)+'</a>':'No disponible')+'</p><p><strong>Dirección:</strong> '+(c&&c.direccion?esc(c.direccion):'No disponible')+'</p><p><strong>Fuente:</strong> '+(c&&c.fuente?esc(c.fuente):'No disponible')+'</p><p><strong>Verificación:</strong> '+(c?esc(c.verificacion):'Pendiente')+'</p></div><div class="scroll"><table><tr><th>Concurso</th><th>Unidad</th><th>Vac.</th><th>BQ</th><th>Pág.</th></tr>'+g.rows.map(function(r){return '<tr><td>'+r.concurso+'</td><td>'+esc(r.unidad)+'</td><td>'+r.vacantes+'</td><td>'+r.bloqueadas+'</td><td>'+r.pagina+'</td></tr>'}).join('')+'</table></div>'};
-function addBtn(c){if(c.querySelector('.fav-btn'))return;var h=c.querySelector('h3');if(!h)return;var m=h.textContent.trim(),prov='';for(var n=c.firstChild;n;n=n.nextSibling){if(n.nodeType===3&&n.textContent.trim()){prov=n.textContent.trim();break}}var k;try{k=key(m,prov)}catch(e){return}if(!groups.has(k))return;var b=document.createElement('button');b.className='fav-btn';var upd=function(){b.textContent=favorites[k]?'★ Quitar favorito':'☆ Añadir favorito'};upd();b.onclick=function(){toggle(k);upd()};c.appendChild(b)}
+function addBtn(c){if(c.querySelector('.fav-btn'))return;var h=c.querySelector('h3');if(!h)return;var m=h.textContent.trim(),prov='';for(var n=c.firstChild;n;n=n.nextSibling){if(n.nodeType===3&&n.textContent.trim()){prov=n.textContent.trim();break}}var k;try{k=key(m,prov)}catch(e){return}if(!groups.has(k))return;var b=document.createElement('button');b.className='fav-btn';var upd=function(){b.textContent=favorites[k]?'★ Quitar favorito':'☆ Añadir favorito'};upd();b.onclick=function(){toggle(k);upd()};c.appendChild(b);
+var eb=document.createElement('button');
+eb.className='fav-btn email-btn';
+eb.textContent='✉ Enviar correo';
+eb.onclick=function(){sendVacancyEmail(g)};
+c.appendChild(eb);}
 new MutationObserver(function(){document.querySelectorAll('.leaflet-popup-content').forEach(addBtn)}).observe(document.body,{childList:true,subtree:true});
 $('save').onclick=function(){
 var doc=document.documentElement.cloneNode(true);
