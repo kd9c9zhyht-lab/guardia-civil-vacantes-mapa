@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardia Civil · vacantes y BQ · favoritos</title>
+<style>html,body{margin:0;height:100%}iframe{border:0;width:100%;height:100%}#err{padding:16px;font:14px system-ui}</style>
+</head><body>
+<iframe id="f" title="Mapa Guardia Civil con favoritos" src="https://kd9c9zhyht-lab.github.io/guardia-civil-vacantes-mapa/mapa_gc_aeropuertos_anuales.html?v=3"></iframe>
+<div id="err" hidden></div>
+<script type="text/plain" id="favsrc">
+(function(){
+function init(){
+if(window.__gcFav)return;window.__gcFav=true;
+var FKEY='gc-favoritos-v1',CKEY='gc-cuarteles-v1';
+var favorites={},cuarteles={};
+try{var n=document.getElementById('gc-favoritos');favorites=JSON.parse(n?n.textContent:(localStorage.getItem(FKEY)||'{}'))}catch(e){}
+try{var c=document.getElementById('gc-cuarteles');cuarteles=JSON.parse(c?c.textContent:(localStorage.getItem(CKEY)||'{}'))}catch(e){}
+var favLayer=L.layerGroup().addTo(map);
+function saveFavs(){try{localStorage.setItem(FKEY,JSON.stringify(favorites))}catch(e){}var n=document.getElementById('gc-favoritos');if(n)n.textContent=JSON.stringify(favorites);renderList();draw()}
+function saveCuarteles(){try{localStorage.setItem(CKEY,JSON.stringify(cuarteles))}catch(e){}var c=document.getElementById('gc-cuarteles');if(c)c.textContent=JSON.stringify(cuarteles)}
+function draw(){favLayer.clearLayers();for(var k in favorites){if(favorites[k]&&favorites[k].visible===false)continue;var g=groups.get(k),p=coords[k];if(!g||!valid(p))continue;L.circleMarker([p.lat,p.lon],{radius:10,color:'#b8860b',weight:4,fillColor:'#ffd700',fillOpacity:.85}).bindTooltip('★ '+g.municipio).addTo(favLayer)}}
+function renderList(){var list=document.getElementById('favList');if(!list)return;var ks=Object.keys(favorites);document.getElementById('favCount').textContent=ks.length;list.innerHTML=ks.length?'':'<p class="small">Sin favoritos marcados.</p>';ks.forEach(function(k){var g=groups.get(k);if(!g)return;var row=document.createElement('div');row.className='fav-item';var lab=document.createElement('label');var cb=document.createElement('input');cb.type='checkbox';cb.checked=favorites[k].visible!==false;cb.onchange=function(){favorites[k].visible=cb.checked;saveFavs()};var sp=document.createElement('span');sp.className='fav-star';sp.textContent='★ ';lab.appendChild(cb);lab.appendChild(sp);lab.appendChild(document.createTextNode(g.municipio+' · '+g.provincia));row.appendChild(lab);list.appendChild(row)})}
+function toggle(k){if(favorites[k])delete favorites[k];else favorites[k]={visible:true};saveFavs()}
+var st=document.createElement('style');st.textContent='.fav-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #ddd}.fav-star{color:#b8860b}.fav-btn{width:100%;margin-top:6px}.popup-links p{margin:6px 0}';document.head.appendChild(st);
+var aside=document.querySelector('aside');
+var pend=document.getElementById('pendingTitle');
+var anchor=pend?pend.closest('details'):null;
+if(aside&&!document.getElementById('favPanel')){var det=document.createElement('details');det.id='favPanel';det.open=true;det.innerHTML='<summary>Favoritos (<span id="favCount">0</span>)</summary><div><button id="favShowAll">Mostrar todos</button><button id="favHideAll">Ocultar todos</button><button id="favClear">Vaciar favoritos</button></div><div id="favList" class="scroll"></div>';aside.insertBefore(det,anchor||null)}
+if(aside&&!document.getElementById('cuartelPanel')){var cd=document.createElement('details');cd.id='cuartelPanel';cd.innerHTML='<summary>Cuarteles (<span id="cuartelCount">0</span>)</summary><p class="small">Guarda la dirección exacta del cuartel para cada localidad. Se usará en “Localización Cuartel” y se incluirá en el HTML descargado.</p><select id="cuartelPlace" style="width:100%"></select><label>Dirección exacta <input id="cuartelAddr" type="text" style="width:100%"></label><button id="cuartelSave">Guardar dirección</button><button id="cuartelDelete">Eliminar dirección</button><div id="cuartelList" class="scroll"></div>';document.getElementById('favPanel').after(cd)}
+if(aside&&!document.getElementById('descPanel')){var fav=document.getElementById('favPanel');var desc=document.createElement('details');desc.id='descPanel';desc.open=true;var sum=document.createElement('summary');sum.textContent='Descripción';desc.appendChild(sum);var inner=document.createElement('div');while(aside.firstChild&&aside.firstChild!==fav){inner.appendChild(aside.firstChild)}desc.appendChild(inner);aside.insertBefore(desc,fav)}
+aside.querySelectorAll('details').forEach(function(d){if(d.id!=='descPanel')d.open=false});
+document.getElementById('favShowAll').onclick=function(){for(var k in favorites)favorites[k].visible=true;saveFavs()};
+document.getElementById('favHideAll').onclick=function(){for(var k in favorites)favorites[k].visible=false;saveFavs()};
+document.getElementById('favClear').onclick=function(){if(confirm('¿Eliminar todos los favoritos?')){favorites={};saveFavs()}};
+function fillCuartelSelect(){var s=document.getElementById('cuartelPlace');if(!s)return;var cur=s.value;s.innerHTML=sorted.map(function(g){return '<option value="'+esc(g.key)+'">'+esc(g.municipio+' · '+g.provincia)+'</option>'}).join('');if(cur&&groups.has(cur))s.value=cur;renderCuartelList()}
+function renderCuartelList(){var l=document.getElementById('cuartelList');if(!l)return;var ks=Object.keys(cuarteles);document.getElementById('cuartelCount').textContent=ks.length;l.innerHTML=ks.length?'':'<p class="small">Sin direcciones guardadas.</p>';ks.forEach(function(k){var g=groups.get(k);if(!g)return;var row=document.createElement('div');row.className='fav-item';row.innerHTML='<span>★ '+esc(g.municipio)+' · '+esc(g.provincia)+'</span><span class="small">'+esc(cuarteles[k])+'</span>';l.appendChild(row)})}
+function refreshCuartelEditor(){var k=document.getElementById('cuartelPlace').value;document.getElementById('cuartelAddr').value=cuarteles[k]||''}
+document.getElementById('cuartelPlace').onchange=refreshCuartelEditor;
+document.getElementById('cuartelSave').onclick=function(){var k=document.getElementById('cuartelPlace').value,a=document.getElementById('cuartelAddr').value.trim();if(!groups.has(k)||!a)return;cuarteles[k]=a;saveCuarteles();renderCuartelList();refresh()};
+document.getElementById('cuartelDelete').onclick=function(){var k=document.getElementById('cuartelPlace').value;if(cuarteles[k]){delete cuarteles[k];saveCuarteles();renderCuartelList();refreshCuartelEditor();refresh()}};
+window.nearestLondon=function(p){var best=null;for(var i=0;i<APS.length;i++){var a=APS[i];if(!a.active)continue;var route=String(a.route||'');if(!/londr|london/i.test(route))continue;var d=hav(p.lat,p.lon,a.lat,a.lon);if(!best||d<best.d)best=Object.assign({},a,{d:d})}return best};
+window.popup=function(g,p,n){
+var nl=nearestLondon(p);
+var k=g.key,addr=cuarteles[k];
+var q=encodeURIComponent(addr||('Cuartel de la Guardia Civil, '+g.municipio+', '+g.provincia));
+var home=encodeURIComponent('Carretera de Benavente, 18, Valderas, 24220, León');
+return '<h3>'+esc(g.municipio)+'</h3>'+esc(g.provincia)+'<p>Vacantes: '+g.vacantes+' · BQ: '+g.bloqueadas+'</p>'+(n?'<p>Aeropuerto más cercano activo: '+esc(n.name)+' ('+n.code+')<br>'+n.d.toFixed(1)+' km en línea recta<br>'+esc(n.route)+'<br><a href="'+esc(n.source)+'" target="_blank" rel="noopener">Fuente de la ruta</a></p>':'<p>Sin aeropuertos activos.</p>')+(nl?'<p>Aeropuerto con vuelo a Londres más cercano: '+esc(nl.name)+' ('+nl.code+') · '+nl.d.toFixed(1)+' km</p><div class="popup-links"><p><strong>Ruta aeropuerto:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+p.lat+','+p.lon+'&destination='+nl.lat+','+nl.lon+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?saddr='+p.lat+','+p.lon+'&daddr='+nl.lat+','+nl.lon+'">Apple Maps</a></p>':'<p>No hay aeropuerto con vuelo a Londres identificado.</p>')+'<p class="small">Punto municipal; no ubicación exacta del puesto. '+esc(p.source||'Coordenadas importadas')+'</p><div class="popup-links"><p><strong>Localización Cuartel:</strong> '+(addr?esc(addr)+' · ':'')+'<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?q='+q+'">Apple Maps</a></p><p><strong>Ruta a casa:</strong> <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin='+p.lat+','+p.lon+'&destination='+home+'">Google Maps</a> · <a target="_blank" rel="noopener" href="https://maps.apple.com/?saddr='+p.lat+','+p.lon+'&daddr='+home+'">Apple Maps</a></p></div><div class="scroll"><table><tr><th>Concurso</th><th>Unidad</th><th>Vac.</th><th>BQ</th><th>Pág.</th></tr>'+g.rows.map(function(r){return '<tr><td>'+r.concurso+'</td><td>'+esc(r.unidad)+'</td><td>'+r.vacantes+'</td><td>'+r.bloqueadas+'</td><td>'+r.pagina+'</td></tr>'}).join('')+'</table></div>'};
+function addBtn(c){if(c.querySelector('.fav-btn'))return;var h=c.querySelector('h3');if(!h)return;var m=h.textContent.trim(),prov='';for(var n=c.firstChild;n;n=n.nextSibling){if(n.nodeType===3&&n.textContent.trim()){prov=n.textContent.trim();break}}var k;try{k=key(m,prov)}catch(e){return}if(!groups.has(k))return;var b=document.createElement('button');b.className='fav-btn';var upd=function(){b.textContent=favorites[k]?'★ Quitar favorito':'☆ Añadir favorito'};upd();b.onclick=function(){toggle(k);upd()};c.appendChild(b)}
+new MutationObserver(function(){document.querySelectorAll('.leaflet-popup-content').forEach(addBtn)}).observe(document.body,{childList:true,subtree:true});
+$('save').onclick=function(){
+var doc=document.documentElement.cloneNode(true);
+doc.querySelector('#embedded-coordinates').textContent=JSON.stringify(coords);
+doc.querySelector('#coordinate-audit').textContent=JSON.stringify(audit);
+doc.querySelector('#gc-airports').textContent=JSON.stringify(APS);
+doc.querySelector('#map').innerHTML='';
+doc.querySelector('#airports').innerHTML='';
+doc.querySelector('#load').removeAttribute('disabled');
+var p=doc.querySelector('#favPanel');if(p)p.remove();
+var cp=doc.querySelector('#cuartelPanel');if(cp)cp.remove();
+var dp=doc.querySelector('#descPanel');if(dp)dp.remove();
+var fn=doc.querySelector('#gc-favoritos');if(!fn){fn=document.createElement('script');fn.id='gc-favoritos';fn.type='application/json';doc.body.appendChild(fn)}
+fn.textContent=JSON.stringify(favorites);
+var fc=doc.querySelector('#gc-cuarteles');if(!fc){fc=document.createElement('script');fc.id='gc-cuarteles';fc.type='application/json';doc.body.appendChild(fc)}
+fc.textContent=JSON.stringify(cuarteles);
+dl('mapa_gc_anual_con_coordenadas.html','<!doctype html>\n'+doc.outerHTML,'text/html;charset=utf-8');
+};
+fillCuartelSelect();refreshCuartelEditor();draw();renderList();refresh();
+}
+function wait(){if(window.L&&typeof refresh==='function'&&document.querySelector('.leaflet-container'))init();else setTimeout(wait,250)}
+wait();
+})();
+</script>
+<script>
+var f=document.getElementById('f'),err=document.getElementById('err');
+f.addEventListener('load',function(){
+ var d=f.contentDocument,w=f.contentWindow;
+ if(!d||!w){err.hidden=false;err.textContent='No se pudo acceder al mapa.';return}
+ try{var s=d.createElement('script');s.textContent=document.getElementById('favsrc').textContent;d.body.appendChild(s)}catch(e){err.hidden=false;err.textContent='Error al activar favoritos: '+e.message}
+});
+</script>
+</body></html>
