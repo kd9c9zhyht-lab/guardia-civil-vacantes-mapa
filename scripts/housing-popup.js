@@ -19,11 +19,15 @@ var invByKey = new Map();
   if (groups.has(k)) invByKey.set(k, m);
 });
 function gcInvEntry(g) { return g ? invByKey.get(g.key) : null; }
-function gcInvTotal(m) {
-  return m ? m.unidades.reduce(function (a, u) { return a + (u.incluido ? u.max_cabos_guardias : 0); }, 0) : 0;
+function gcInvTotal(m) { return m ? m.cyg_habitables : 0; }
+function gcInvFree(m) { return m ? m.cyg_libres_habitables : 0; }
+function gcInvFreeOnly() {
+  var input = document.getElementById('inv2017Free');
+  return !!(input && input.checked && !input.disabled);
 }
 function gcHasInv(g) {
-  return !!(g && g.vacantes > 0 && gcInvTotal(gcInvEntry(g)) > 0);
+  var m = gcInvEntry(g);
+  return !!(g && g.vacantes > 0 && gcInvTotal(m) > 0 && (!gcInvFreeOnly() || gcInvFree(m) > 0));
 }
 function gcInvOnly() {
   var input = document.getElementById('inv2017Only');
@@ -87,37 +91,49 @@ function gcFmt(n) { return Number(n).toLocaleString('es-ES'); }
 function gcInv2017(c, g) {
   var m = gcInvEntry(g);
   if (!m || !(g.vacantes > 0) || c.querySelector('.gc-inv2017')) return;
-  var total = gcInvTotal(m);
+  var F = GC_INV2017.fuente;
   var section = document.createElement('section');
   section.className = 'gc-inv2017';
-  section.setAttribute('aria-label', 'Inventario oficial de pabellones 2017, dato histórico');
-  var html = '<span class="gc-inv-badge">Dato histórico · 2017</span>' +
-    '<h4>Inventario oficial de pabellones</h4>';
-  if (total > 0) {
-    html += '<p class="gc-inv-total">Hasta <strong>' + gcFmt(total) + '</strong> ' + (total === 1 ? 'pabellón computable' : 'pabellones computables') + ' para Cabos y Guardias en 2017</p>';
+  section.setAttribute('aria-label', 'Pabellones de Cabos y Guardias en 2017, documento oficial verificado');
+  var html = '<span class="gc-inv-badge">Verificado · documento oficial 2017</span>' +
+    '<h4>Pabellones de Cabos y Guardias en 2017</h4>';
+  if (m.cyg > 0) {
+    html += '<p class="gc-inv-total"><strong>' + gcFmt(m.cyg) + '</strong> ' + (m.cyg === 1 ? 'pabellón' : 'pabellones') + ' de Cabo a Guardia: <strong>' +
+      gcFmt(m.cyg_habitables) + '</strong> habitables, <strong>' + gcFmt(m.cyg_libres_habitables) + '</strong> ' + (m.cyg_libres_habitables === 1 ? 'libre' : 'libres') + ' y habitables a la fecha del inventario.</p>';
   } else {
-    html += '<p class="gc-inv-total">Sin pabellones computables para Cabos y Guardias en 2017</p>';
+    html += '<p class="gc-inv-total">Sin pabellones de unidad para Cabos y Guardias en 2017.</p>';
   }
-  html += '<table><thead><tr><th>Unidad (2017)</th><th title="Pabellones existentes en 2017">Total</th><th title="Pabellones de cargo reservados (anexo I)">Cargo</th><th title="Máximo computable para Cabos y Guardias">C. y G.</th></tr></thead><tbody>';
-  var mixed = false, notes = [];
+  html += '<table><thead><tr><th>Unidad (2017)</th><th title="Pabellones de unidad para Cabo a Guardia">C. y G.</th><th title="Ocupados en 2017">Ocup.</th><th title="Libres y habitables en 2017">Libres</th><th title="No utilizables o inhabitables">Inhab.</th></tr></thead><tbody>';
+  var other = { cargo: 0, cargo_cyg: 0, suboficial: 0, oficiales: 0, otros: 0, total: 0 }, est = {};
   m.unidades.forEach(function (u) {
-    if (u.grupos_mixtos) mixed = true;
-    html += '<tr' + (u.incluido ? '' : ' class="gc-inv-out"') + '><td>' + esc(u.unidad) +
-      '<span class="gc-inv-type">' + esc(u.tipo) + '</span></td><td>' + gcFmt(u.existentes) + '</td><td>' +
-      (u.cargo_reservado == null ? '–' : gcFmt(u.cargo_reservado)) + '</td><td>' +
-      (u.incluido ? gcFmt(u.max_cabos_guardias) : 'Excluida') + '</td></tr>';
-    if (!u.incluido && u.motivo_exclusion) notes.push(u.unidad + ': ' + u.motivo_exclusion);
+    html += '<tr' + (u.cyg ? '' : ' class="gc-inv-out"') + '><td>' + esc(u.unidad) + '<span class="gc-inv-type">' + gcFmt(u.total) + ' pabellones en total</span></td><td>' +
+      gcFmt(u.cyg) + '</td><td>' + gcFmt(u.cyg_ocupados) + '</td><td>' + gcFmt(u.cyg_libres_habitables) + '</td><td>' + gcFmt(u.cyg_inhabitables) + '</td></tr>';
+    Object.keys(other).forEach(function (k) { other[k] += u[k] || 0; });
+    Object.keys(u.cyg_estado || {}).forEach(function (k) { est[k] = (est[k] || 0) + u.cyg_estado[k]; });
   });
-  html += '</tbody></table><p class="gc-house-note">Total: pabellones existentes en 2017. Cargo: reservados por el anexo I. C. y G.: máximo computable para Cabos y Guardias.</p>';
-  notes.forEach(function (t) { html += '<p class="gc-house-note">' + esc(t) + '</p>'; });
-  if (mixed) html += '<p class="gc-house-note">Las comandancias, zonas y unidades con cupo propio reúnen pabellones de los cuatro grupos (oficiales, suboficiales, y cabos y guardias); la cifra es un máximo.</p>';
-  var p = m.provincia_2017;
-  if (p) html += '<p class="gc-house-note">Contexto provincial en 2017 (' + esc(p.provincia_2017) + '): ' + gcFmt(p.existentes) +
-    ' pabellones existentes, ' + gcFmt(p.ocupados) + ' ocupados' +
-    (p.inhabitables != null ? ' y ' + gcFmt(p.inhabitables) + ' no utilizables o inhabitables' : '') + '.</p>';
-  html += '<p class="gc-house-note">Cálculo: pabellones de la unidad menos los pabellones de cargo del anexo I de la Orden General 5/2005 (Comandante de Puesto, Jefe de Comandancia, etc.). El inventario de 2017 no desglosa los grupos de pabellones de unidad, por lo que la cifra es un máximo. No acredita que hoy existan, sean habitables o estén libres.</p>';
-  html += '<ul><li><a target="_blank" rel="noopener noreferrer" href="' + esc(gcSafeSource(GC_INV2017.fuente.url)) + '">Respuesta del Gobierno al Congreso, anexo por municipios</a> · ' + esc(GC_INV2017.fuente.fecha) + '</li>' +
-    '<li><a target="_blank" rel="noopener noreferrer" href="' + esc(gcSafeSource(GC_INV2017.clasificacion.url)) + '">Orden General 5/2005, art. 5 y anexo I</a> · 19/05/2005</li></ul>';
+  html += '</tbody></table>';
+  var order = [['BUENO', 'bueno'], ['REGULAR', 'regular'], ['DEFICIENTE', 'deficiente'], ['MALO', 'malo'], ['NO UTILIZABLE / INHABITABLE', 'inhabitable'], ['SIN ESTADO', 'sin estado']];
+  var parts = order.filter(function (o) { return est[o[0]]; }).map(function (o) { return gcFmt(est[o[0]]) + ' ' + o[1]; });
+  if (parts.length) html += '<p class="gc-house-note">Estado de los pabellones de Cabos y Guardias: ' + parts.join(', ') + '.</p>';
+  var oth = [];
+  if (other.cargo) oth.push(gcFmt(other.cargo) + ' de cargo' + (other.cargo_cyg ? ' (' + gcFmt(other.cargo_cyg) + ' de Cabo a Guardia, ligados a un mando)' : ''));
+  if (other.suboficial) oth.push(gcFmt(other.suboficial) + ' de suboficiales');
+  if (other.oficiales) oth.push(gcFmt(other.oficiales) + ' de oficiales');
+  if (other.otros) oth.push(gcFmt(other.otros) + ' sin tipo o empleo indicado o de representación');
+  if (oth.length) html += '<p class="gc-house-note">Otros pabellones no computados: ' + oth.join('; ') + '.</p>';
+  var p = GC_INV2017.provincias[m.provincia_2017];
+  if (p) {
+    html += '<p class="gc-house-note">Provincia en 2017: ' + gcFmt(p.total) + ' pabellones, ' + gcFmt(p.ocupados) + ' ocupados y ' + gcFmt(p.inhabitables) + ' inhabitables; ' +
+      gcFmt(p.cyg) + ' de Cabos y Guardias, de ellos ' + gcFmt(p.cyg_libres_habitables) + ' libres y habitables' +
+      (p.efectivos_30_04_2017 ? '. Efectivos disponibles a 30/04/2017: ' + gcFmt(p.efectivos_30_04_2017) : '') + '.</p>';
+    (p.gasto_212_comandancia || []).forEach(function (x) {
+      var sum = x.importes.reduce(function (a, b) { return a + b; }, 0);
+      html += '<p class="gc-house-note">Gasto en conservación de pabellones, Comandancia de ' + esc(x.comandancia.charAt(0) + x.comandancia.slice(1).toLowerCase()) + ': ' +
+        sum.toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' € entre 2012 y 2016 (' + x.importes[4].toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' € en 2016).</p>';
+    });
+  }
+  html += '<p class="gc-house-note">Libres: pabellones de Cabo a Guardia habitables que no figuraban como ocupados en 2017. Es una foto de 2017, no la disponibilidad actual; los inhabitables no se adjudican hasta repararse.</p>';
+  html += '<ul><li><a target="_blank" rel="noopener noreferrer" href="' + esc(gcSafeSource(F.url)) + '">Respuesta del Gobierno a la solicitud de informe 186/657, anexos II y III</a> · ' + esc(F.fecha) + '</li></ul>';
   section.innerHTML = html;
   var after = c.querySelector('.gc-housing') || c.querySelector('.gc-charts');
   if (after) after.after(section); else c.appendChild(section);
@@ -131,8 +147,8 @@ function gcInvStats() {
     var g = marker._gcHousingKey && groups.get(marker._gcHousingKey);
     if (g && gcHasInv(g)) visible.add(g.key);
   });
-  output.textContent = count + ' municipios con vacantes 2026 tenían pabellones computables para Cabos y Guardias en 2017. ' +
-    visible.size + ' visibles con los filtros actuales.';
+  output.textContent = count + ' municipios con vacantes 2026 tenían pabellones habitables de Cabos y Guardias en 2017' +
+    (gcInvFreeOnly() ? ', con al menos uno libre' : '') + '. ' + visible.size + ' visibles con los filtros actuales.';
 }
 function gcHousingStats() {
   var output = document.getElementById('housingStatus');
@@ -154,7 +170,7 @@ function gcHousingStats() {
 (function gcInstallHousing() {
   var st = document.createElement('style');
   st.id = 'gc-housing-style';
-  st.textContent = '.num.gc-has-housing{border-radius:3px!important}.gc-housing{border-top:1px solid #d2d9df;margin-top:12px;padding-top:10px;overflow-wrap:anywhere}.gc-housing h4{margin:0 0 8px;font-size:14px}.gc-housing h5{margin:8px 0 6px;font-size:13px}.gc-housing p{margin:6px 0;font-size:13px;line-height:1.5}.gc-housing ul{margin:4px 0 8px;padding-left:18px;font-size:12px}.gc-housing article+article{border-top:1px solid #e4e8ec;padding-top:6px}.gc-house-note{color:#465a6b;font-size:12px!important}.gc-housing-controls{margin:12px 0;padding:10px;border:1px solid #c5cfd8;border-radius:5px;background:#fff}.gc-housing-controls label{display:flex;gap:8px;align-items:center;cursor:pointer;font-weight:600}.gc-housing-controls input{width:17px;height:17px;flex:none}.gc-inv-sep{border:0;border-top:1px solid #d2d9df;margin:10px 0}.gc-housing-controls p{font-size:12px;line-height:1.45;margin:6px 0;color:#465a6b}.gc-housing-square{display:inline-block;width:11px;height:11px;background:#18314a;border-radius:2px;margin-right:4px}.num.gc-has-inv2017{outline:2px dashed #9a6400;outline-offset:2px}.gc-inv2017{border-top:1px solid #d2d9df;margin-top:12px;padding:10px;background:#fbf7ee;border-radius:4px;overflow-wrap:anywhere}.gc-inv2017 h4{margin:4px 0 6px;font-size:14px}.gc-inv-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.02em;color:#6b4500;background:#f3e3bf;border:1px dashed #9a6400;border-radius:3px;padding:1px 6px}.gc-inv-total{margin:4px 0 8px;font-size:13px}.gc-inv2017 table{width:100%;border-collapse:collapse;font-size:12px;margin:4px 0 6px}.gc-inv2017 th,.gc-inv2017 td{border-bottom:1px solid #e6dcc6;padding:4px 5px;text-align:right;vertical-align:top}.gc-inv2017 th{white-space:nowrap;overflow-wrap:normal}.gc-inv2017 td{overflow-wrap:normal;word-break:normal}.gc-inv2017 th:first-child,.gc-inv2017 td:first-child{text-align:left}.gc-inv-type{display:block;color:#6b5a3a;font-size:11px}.gc-inv-out td{color:#7b7b7b}.gc-inv2017 p{margin:6px 0;line-height:1.45}.gc-inv2017 ul{margin:4px 0 0;padding-left:18px;font-size:12px}.gc-inv-ring{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2a7d3c;outline:2px dashed #9a6400;outline-offset:2px;margin:0 7px 0 3px}.gc-housing-fav{border:3px solid #b8860b;border-radius:3px;background:#ffd700cc;width:20px;height:20px;box-sizing:border-box}.gc-housing a:focus-visible,.gc-housing-controls input:focus-visible{outline:2px solid #0756a3;outline-offset:2px}';
+  st.textContent = '.num.gc-has-housing{border-radius:3px!important}.gc-housing{border-top:1px solid #d2d9df;margin-top:12px;padding-top:10px;overflow-wrap:anywhere}.gc-housing h4{margin:0 0 8px;font-size:14px}.gc-housing h5{margin:8px 0 6px;font-size:13px}.gc-housing p{margin:6px 0;font-size:13px;line-height:1.5}.gc-housing ul{margin:4px 0 8px;padding-left:18px;font-size:12px}.gc-housing article+article{border-top:1px solid #e4e8ec;padding-top:6px}.gc-house-note{color:#465a6b;font-size:12px!important}.gc-housing-controls{margin:12px 0;padding:10px;border:1px solid #c5cfd8;border-radius:5px;background:#fff}.gc-housing-controls label{display:flex;gap:8px;align-items:center;cursor:pointer;font-weight:600}.gc-housing-controls input{width:17px;height:17px;flex:none}.gc-inv-sep{border:0;border-top:1px solid #d2d9df;margin:10px 0}.gc-housing-controls p{font-size:12px;line-height:1.45;margin:6px 0;color:#465a6b}.gc-housing-square{display:inline-block;width:11px;height:11px;background:#18314a;border-radius:2px;margin-right:4px}.num.gc-has-inv2017{outline:2px dashed #9a6400;outline-offset:2px}.gc-inv2017{border-top:1px solid #d2d9df;margin-top:12px;padding:10px;background:#fbf7ee;border-radius:4px;overflow-wrap:anywhere}.gc-inv2017 h4{margin:4px 0 6px;font-size:14px}.gc-inv-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.02em;color:#6b4500;background:#f3e3bf;border:1px dashed #9a6400;border-radius:3px;padding:1px 6px}.gc-inv-total{margin:4px 0 8px;font-size:13px}.gc-inv2017 table{width:100%;border-collapse:collapse;font-size:12px;margin:4px 0 6px}.gc-inv2017 th,.gc-inv2017 td{border-bottom:1px solid #e6dcc6;padding:4px 5px;text-align:right;vertical-align:top}.gc-inv2017 th{white-space:nowrap;overflow-wrap:normal}.gc-inv2017 td{overflow-wrap:normal;word-break:normal}.gc-inv2017 th:first-child,.gc-inv2017 td:first-child{text-align:left}.gc-inv-type{display:block;color:#6b5a3a;font-size:11px}.gc-inv-out td{color:#7b7b7b}.gc-housing-controls .gc-inv-sub{font-weight:500;margin:6px 0 0 25px;font-size:13px}.gc-inv-sub input:disabled+*{opacity:.5}.gc-housing-controls label:has(input:disabled){color:#7a8896;cursor:not-allowed}.gc-inv2017 p{margin:6px 0;line-height:1.45}.gc-inv2017 ul{margin:4px 0 0;padding-left:18px;font-size:12px}.gc-inv-ring{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2a7d3c;outline:2px dashed #9a6400;outline-offset:2px;margin:0 7px 0 3px}.gc-housing-fav{border:3px solid #b8860b;border-radius:3px;background:#ffd700cc;width:20px;height:20px;box-sizing:border-box}.gc-housing a:focus-visible,.gc-housing-controls input:focus-visible{outline:2px solid #0756a3;outline-offset:2px}';
   document.getElementById(st.id)?.remove();
   document.head.appendChild(st);
   var fitStyle = document.createElement('style');
@@ -180,8 +196,9 @@ function gcHousingStats() {
       '<p id="housingStatus" role="status" aria-live="polite"></p>' +
       '<p>Los círculos indican falta de confirmación, no ausencia de vivienda. Solo se marcan municipios con vacantes 2026 positivas.</p>' +
       '<hr class="gc-inv-sep">' +
-      '<label><input type="checkbox" id="inv2017Only" role="switch">Solo pabellones de Cabos y Guardias (inventario 2017)</label>' +
-      '<p><span class="gc-inv-ring" aria-hidden="true"></span>Contorno discontinuo: dato histórico del inventario oficial de 2017, según la clasificación de la Orden General 5/2005. No confirma su existencia actual.</p>' +
+      '<label><input type="checkbox" id="inv2017Only" role="switch">Pabellones de Cabos y Guardias 2017 (verificado)</label>' +
+      '<label class="gc-inv-sub"><input type="checkbox" id="inv2017Free" disabled>Solo con pabellones libres y habitables en 2017</label>' +
+      '<p><span class="gc-inv-ring" aria-hidden="true"></span>Contorno discontinuo: pabellones habitables de Cabo a Guardia según el documento oficial de 06/11/2017 (solicitud 186/657). Dato de 2017, separado de las confirmaciones actuales.</p>' +
       '<p id="inv2017Status" role="status" aria-live="polite"></p>' +
       '<p>Con ambos filtros activados se muestran los municipios que cumplen cualquiera de los dos.</p>';
     $('zero').closest('label').after(panel);
@@ -196,7 +213,7 @@ function gcHousingStats() {
       marker._gcHousingKey = g.key;
       var cls = [], tip = '';
       if (gcHasHousing(g)) { cls.push('gc-has-housing'); tip += ' · Vivienda documentada (disponibilidad no verificada)'; }
-      if (gcHasInv(g)) { cls.push('gc-has-inv2017'); tip += ' · Inventario 2017: hasta ' + gcInvTotal(gcInvEntry(g)) + ' pabellones de Cabos y Guardias (histórico)'; }
+      if (gcHasInv(g)) { cls.push('gc-has-inv2017'); var im = gcInvEntry(g); tip += ' · 2017 (verificado): ' + im.cyg_habitables + ' pabellones habitables de Cabos y Guardias, ' + im.cyg_libres_habitables + ' libres'; }
       if (cls.length) {
         var options = Object.assign({}, marker.options.icon.options);
         options.html = options.html.replace('class="num"', 'class="num ' + cls.join(' ') + '"');
@@ -219,7 +236,8 @@ function gcHousingStats() {
     $(id).addEventListener('input', window.refresh);
   });
   $('housingOnly').addEventListener('change', window.refresh);
-  $('inv2017Only').addEventListener('change', window.refresh);
+  $('inv2017Only').addEventListener('change', function () { $('inv2017Free').disabled = !$('inv2017Only').checked; window.refresh(); });
+  $('inv2017Free').addEventListener('change', window.refresh);
   if (audit.loaded && missing().some(function (g) {
     return ['alicante', 'castellon'].includes(prov(g.provincia));
   })) load();
