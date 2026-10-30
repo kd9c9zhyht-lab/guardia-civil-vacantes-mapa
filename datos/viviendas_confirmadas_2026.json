@@ -1,0 +1,358 @@
+{
+  "revisado": "30/10/2026",
+  "scope_count": 420,
+  "records": [
+    {
+      "municipio": "Torrevieja",
+      "provincia": "Alicante/Alacant",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Torrevieja",
+      "existencia": "Acreditada: la fuente describe pabellones vivienda existentes.",
+      "tipo_cantidad": "32 pabellones vivienda, cifra publicada el 16/09/2026.",
+      "restriccion": "No indicada en la fuente.",
+      "evidencia": "Descripción de pabellones vivienda en la zona posterior del cuartel.",
+      "fuentes": [
+        {
+          "nombre": "Información",
+          "fecha": "16/09/2026",
+          "url": "https://www.informacion.es/vega-baja/2026/09/16/guardia-civil-obras-cuartel-torrevieja-reforma-presupuesto-limitado-96-000-euros-134362499.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La noticia también informa de una reforma de dependencias interiores; no acredita habitabilidad de los pabellones vivienda."
+    },
+    {
+      "municipio": "Vitoria-Gasteiz",
+      "provincia": "Araba/Alava",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Sansomendi",
+      "existencia": "Uso residencial documentado en un reportaje de 15/04/2026 realizado dentro del cuartel.",
+      "tipo_cantidad": "Viviendas para agentes y sus familias. Número de viviendas no acreditado; no se equipara el número de familias con el de unidades residenciales.",
+      "restriccion": "Requisitos y categorías de adjudicación no especificados en el reportaje.",
+      "evidencia": "La crónica describe a agentes y familias que viven en el recinto de Sansomendi, en Vitoria-Gasteiz.",
+      "fuentes": [
+        {
+          "nombre": "Cadena SER, reportaje de SER Vitoria",
+          "fecha": "15/04/2026",
+          "url": "https://cadenaser.com/euskadi/2026/04/15/asi-viven-los-guardias-civiles-en-el-cuartel-de-sansomendi-he-retomado-el-euskera-estoy-con-el-b1-en-el-euskaltegi-ser-vitoria/"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La residencia efectiva de algunas familias no demuestra disponibilidad para nuevos adjudicatarios."
+    },
+    {
+      "municipio": "Manresa",
+      "provincia": "Barcelona",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Manresa",
+      "existencia": "Viviendas residenciales existentes; la fuente indica que algunas estaban ocupadas en 2023.",
+      "tipo_cantidad": "Inventario no contrastado oficialmente: la noticia reproduce una cifra de 78 viviendas atribuida a ERC (2024). No es una cifra de viviendas disponibles.",
+      "restriccion": "No indicada en la fuente.",
+      "evidencia": "La fuente atribuye el dato a ERC y lo refiere a la instalación del cuartel.",
+      "fuentes": [
+        {
+          "nombre": "El Debate",
+          "fecha": "24 de abril de 2024",
+          "url": "https://www.eldebate.com/espana/cataluna/20240424/ayuntamiento-manresa-pide-eche-guardia-civil-municipio-destinar-cuartel-usos-sociales_191701.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La moción pide ceder el inmueble al Ayuntamiento para vivienda social; la fuente no afirma que la cesión se haya efectuado."
+    },
+    {
+      "municipio": "Bilbao",
+      "provincia": "Bizkaia",
+      "status": "confirmed",
+      "cuartel": "Acuartelamiento de La Salve",
+      "existencia": "Viviendas residenciales existentes acreditadas en 2023.",
+      "tipo_cantidad": "Cantidad no indicada; total no acreditado.",
+      "restriccion": "No especificada.",
+      "evidencia": "Artículo de EL PAÍS que menciona familiares alojados en viviendas del acuartelamiento.",
+      "fuentes": [
+        {
+          "nombre": "EL PAÍS",
+          "fecha": "2023-01-04",
+          "url": "https://elpais.com/espana/2023-01-04/la-guardia-civil-no-tiene-quien-le-sirva-cafe-en-bilbao.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La cifra de 76 pabellones atribuida a Bilbao en la fuente de 2019 es anterior al periodo requerido y no se toma como cifra actual. La cafetería cerrada que menciona la noticia no acredita el cierre de las viviendas."
+    },
+    {
+      "municipio": "Algeciras",
+      "provincia": "Cádiz",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de San García",
+      "existencia": "La fuente acredita un conjunto de viviendas en las instalaciones.",
+      "tipo_cantidad": "Conjunto de viviendas; número no indicado; total no acreditado (30/04/2026).",
+      "restriccion": "No indicada.",
+      "evidencia": "La noticia describe las instalaciones de la Guardia Civil en San García y menciona un conjunto de viviendas en el recinto.",
+      "fuentes": [
+        {
+          "nombre": "Diputación de Cádiz",
+          "fecha": "30/04/2026",
+          "url": "https://www.dipucadiz.es/prensa/actualidad/Contratadas-las-obras-para-incorporar-nuevos-servicios-en-instalaciones-de-la-Guardia-Civil-en-Algeciras-y-Vejer/"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La obra contratada descrita en la noticia es para una nave de adiestramiento; no acredita viviendas nuevas ni el estado de habitabilidad de las existentes."
+    },
+    {
+      "municipio": "Laredo",
+      "provincia": "Cantabria",
+      "status": "confirmed",
+      "cuartel": "Acuartelamiento de la Guardia Civil de Laredo (Compañía de Laredo)",
+      "existencia": "La fuente refiere una vivienda oficial existente y ocupada desde 2022; no acredita su disponibilidad actual.",
+      "tipo_cantidad": "1 vivienda oficial mencionada en 2025; total no acreditado.",
+      "restriccion": "Adjudicada a un teniente adjunto; otros requisitos de adjudicación no acreditados.",
+      "evidencia": "Noticia de prensa que refiere la ocupación de una vivienda oficial del cuartel. La información sobre los recibos procede de una denuncia citada por el medio.",
+      "fuentes": [
+        {
+          "nombre": "THE OBJECTIVE",
+          "fecha": "2025-04-07",
+          "url": "https://theobjective.com/espana/2025-04-07/mando-guardia-civil-pincho-luz/"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La fuente no confirma si la vivienda sigue habilitada o está actualmente ocupada."
+    },
+    {
+      "municipio": "Ceuta",
+      "provincia": "Ceuta",
+      "status": "confirmed",
+      "cuartel": "Parque de viviendas de la Comandancia de Ceuta (sin desglose por cuartel)",
+      "existencia": "Viviendas oficiales existentes y ocupadas acreditadas por respuesta del Gobierno de 17/09/2026.",
+      "tipo_cantidad": "123 viviendas existentes; 118 ocupadas y 3 no habitables, según el estado comunicado el 17/09/2026. No consta desglose por tipología o cuartel.",
+      "restriccion": "La fuente se refiere al conjunto de la comandancia de la ciudad, no al alojamiento asignado a cada vacante.",
+      "evidencia": "La tabla de uso de viviendas de la Guardia Civil incluye la fila CEUTA: 118 ocupadas, 3 no habitables, 123 existentes.",
+      "fuentes": [
+        {
+          "nombre": "Gobierno de España / Senado, respuesta 684/32364",
+          "fecha": "17/09/2026",
+          "url": "https://www.senado.es/web/expedientdocblobservlet?legis=15&id=277309"
+        }
+      ],
+      "disponibilidad": "No verificada. Las cifras de ocupación no constituyen una oferta de adjudicación; consultar la unidad o comandancia.",
+      "nota": "No se ha deducido un número de viviendas libres a partir de la diferencia entre existencias, ocupación y no habitabilidad."
+    },
+    {
+      "municipio": "Almadén",
+      "provincia": "Ciudad Real",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Almadén",
+      "existencia": "Pabellones residenciales existentes y ocupados por familias, según la fuente de 03/03/23.",
+      "tipo_cantidad": "Cantidad de pabellones o viviendas no indicada; total no acreditado.",
+      "restriccion": "No se indica una restricción de alojamiento.",
+      "evidencia": "La noticia acredita ocupación residencial, pero describe las obras de mejora como un proyecto.",
+      "fuentes": [
+        {
+          "nombre": "Portal Web de la Guardia Civil",
+          "fecha": "03/03/23",
+          "url": "https://web.guardiacivil.es/es/destacados/noticias/La-directora-general-de-la-Guardia-Civil-presenta-el-proyecto-de-obras-de-mejora-del-cuartel-de-Almaden-Ciudad-Real/"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La existencia residencial está acreditada; no se acredita la terminación de las obras proyectadas ni la habitabilidad actual."
+    },
+    {
+      "municipio": "Isla Cristina",
+      "provincia": "Huelva",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Isla Cristina",
+      "existencia": "Pabellones existentes; una noticia de 2025 anuncia reparaciones en sus bloques. El diagnóstico municipal de 2018 los describe como residenciales.",
+      "tipo_cantidad": "Pabellones residenciales; cantidad no especificada, total no acreditado.",
+      "restriccion": "No consta en los textos adjuntos.",
+      "evidencia": "La noticia de 2025 anuncia la reparación de escaleras de los bloques de pabellones existentes. El diagnóstico municipal de 2018 describe el cuartel con pabellones residenciales.",
+      "fuentes": [
+        {
+          "nombre": "La Higuerita, actuaciones PFEA sobre pabellones existentes",
+          "fecha": "17/09/2025",
+          "url": "https://www.lahiguerita.es/isla-cristina-generara-52-puestos-de-trabajo-gracias-a-los-proyectos-del-programa-de-fomento-del-empleo-agrario-2025/"
+        },
+        {
+          "nombre": "Ayuntamiento de Isla Cristina, diagnóstico municipal",
+          "fecha": "2018",
+          "url": "https://infancia.islacristina.org/wp-content/uploads/2018/05/Informe-diagn%C3%B3stico-Isla-Cristina-2.pdf"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La descripción residencial procede del diagnóstico municipal de 2018. La noticia de 2025 acredita continuidad material de los pabellones y anuncia reparaciones, pero no verifica ocupación, habitabilidad ni terminación de las obras."
+    },
+    {
+      "municipio": "Palma",
+      "provincia": "Illes Balears",
+      "status": "confirmed",
+      "cuartel": "Pabellones oficiales de la Guardia Civil en Palma (cuartel concreto no identificado en la fuente)",
+      "existencia": "La fuente acredita viviendas oficiales de la Guardia Civil en Palma, destinadas a alojamiento permanente.",
+      "tipo_cantidad": "365 viviendas reportadas en Palma; cifra publicada el 09/05/2026. Total no acreditado por cuartel ni verificado independientemente.",
+      "restriccion": "Uso como residencia principal de los agentes; la fuente señala que algunas viviendas son inutilizables, sin precisar cuántas.",
+      "evidencia": "Artículo de prensa fechado el 9 de mayo de 2026; informa de viviendas oficiales en Palma y de su uso residencial permanente.",
+      "fuentes": [
+        {
+          "nombre": "Majorca Daily Bulletin",
+          "fecha": "09/05/2026",
+          "url": "https://www.majorcadailybulletin.com/news/local/2026/05/09/142193/the-dire-shortage-official-homes-for-guardia-civil-officers-mallorca.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La cifra es municipal y no permite atribuir las viviendas a cuarteles individuales. La fuente advierte que algunas son inutilizables, pero no afirma que todas lo sean."
+    },
+    {
+      "municipio": "Teguise",
+      "provincia": "Las Palmas",
+      "status": "confirmed",
+      "cuartel": "Puesto Principal de Costa Teguise",
+      "existencia": "Pabellón oficial residencial existente y ocupado en 2020.",
+      "tipo_cantidad": "Cantidad no indicada; total no acreditado.",
+      "restriccion": "No consta.",
+      "evidencia": "La noticia informa de que un agente residía en el pabellón oficial del puesto.",
+      "fuentes": [
+        {
+          "nombre": "SER Lanzarote",
+          "fecha": "2020-07-28",
+          "url": "https://cadenaser.com/emisora/2020/07/28/ser_lanzarote/1595964747_078516.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La existencia residencial está acreditada, pero no el estado actual, la habitabilidad ni el número de pabellones."
+    },
+    {
+      "municipio": "Ponferrada",
+      "provincia": "León",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Ponferrada",
+      "existencia": "Vivienda residencial existente acreditada por la mención de que guardias civiles viven en el cuartel.",
+      "tipo_cantidad": "90 guardias civiles viven allí, según noticia del 12/10/2023; número total de viviendas no acreditado.",
+      "restriccion": "No consta restricción de acceso o adjudicación en la fuente.",
+      "evidencia": "La noticia informa que guardias civiles viven en el cuartel de Ponferrada.",
+      "fuentes": [
+        {
+          "nombre": "Radio Bierzo / Cadena SER",
+          "fecha": "2023-10-12",
+          "url": "https://cadenaser.com/castillayleon/2023/10/12/la-guardia-civil-transmite-la-devocion-al-pilar-en-una-ponferrada-segura-radio-bierzo/"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La cifra citada es de personas, no de viviendas."
+    },
+    {
+      "municipio": "Burela",
+      "provincia": "Lugo",
+      "status": "confirmed",
+      "cuartel": "Acuartelamiento de la Guardia Civil de Burela",
+      "existencia": "La fuente informa de viviendas vinculadas al acuartelamiento existente en Burela.",
+      "tipo_cantidad": "40 viviendas; cifra publicada el 13-03-2023; la fuente no especifica si es el total.",
+      "restriccion": "No indicada en la fuente.",
+      "evidencia": "Noticia sobre el estado del cuartel que informa de 40 viviendas.",
+      "fuentes": [
+        {
+          "nombre": "La Voz de Galicia",
+          "fecha": "13-03-2023",
+          "url": "https://www.lavozdegalicia.es/noticia/galicia/2023/03/12/ruinoso-cuartel-burela-guardias-pintores-jardineros/00031678642051169670777.htm"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La fuente describe deterioro, pero no acredita que las viviendas estén habitables ni que haya vacantes."
+    },
+    {
+      "municipio": "Torrelodones",
+      "provincia": "Madrid",
+      "status": "confirmed",
+      "cuartel": "Puesto de la Guardia Civil de La Colonia",
+      "existencia": "Viviendas existentes acreditadas en la publicación de 20/02/2023; el texto señala que las estancias de los agentes permanecerían en el edificio actual.",
+      "tipo_cantidad": "Cantidad no indicada en la publicación de 20/02/2023; total no acreditado.",
+      "restriccion": "No indicada.",
+      "evidencia": "La noticia describe las viviendas del edificio del puesto y señala que el plan era dejar las estancias de los agentes en el lugar actual.",
+      "fuentes": [
+        {
+          "nombre": "El Mundo",
+          "fecha": "20/02/2023",
+          "url": "https://www.elmundo.es/madrid/2023/02/20/63f3e9c7fdddffc4818b4583.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "El artículo también indica: «dejar las estancias de los agentes y trasladar el resto al nuevo recinto del Consistorio anexo al edificio de la Policía Municipal». No acredita el estado actual ni la habitabilidad de las viviendas."
+    },
+    {
+      "municipio": "Melilla",
+      "provincia": "Melilla",
+      "status": "confirmed",
+      "cuartel": "Parque de viviendas de la Comandancia de Melilla (sin desglose por cuartel)",
+      "existencia": "Viviendas oficiales existentes y ocupadas acreditadas por respuesta del Gobierno de 17/09/2026.",
+      "tipo_cantidad": "203 viviendas existentes; 202 ocupadas y ninguna clasificada como no habitable en la respuesta de 17/09/2026. No consta desglose por tipología o cuartel.",
+      "restriccion": "La fuente se refiere al conjunto de la comandancia de la ciudad, no al alojamiento asignado a cada vacante.",
+      "evidencia": "La tabla de uso de viviendas de la Guardia Civil incluye la fila MELILLA: 202 ocupadas, 0 no habitables, 203 existentes.",
+      "fuentes": [
+        {
+          "nombre": "Gobierno de España / Senado, respuesta 684/32364",
+          "fecha": "17/09/2026",
+          "url": "https://www.senado.es/web/expedientdocblobservlet?legis=15&id=277309"
+        }
+      ],
+      "disponibilidad": "No verificada. Las cifras de ocupación no constituyen una oferta de adjudicación; consultar la unidad o comandancia.",
+      "nota": "La diferencia entre el número de viviendas existentes y ocupadas no demuestra que haya una vivienda disponible."
+    },
+    {
+      "municipio": "Santa Marta de Tormes",
+      "provincia": "Salamanca",
+      "status": "confirmed",
+      "cuartel": "Cuartel de la Guardia Civil de Santa Marta de Tormes",
+      "existencia": "Acreditadas dos viviendas para mandos en el cuartel inaugurado en 2023.",
+      "tipo_cantidad": "2 viviendas para mandos (2023); total no acreditado.",
+      "restriccion": "Para mandos.",
+      "evidencia": "La noticia informa de la inauguración del nuevo cuartel y señala que el edificio dispone de viviendas para mandos.",
+      "fuentes": [
+        {
+          "nombre": "Ministerio del Interior, inauguración del cuartel",
+          "fecha": "Octubre de 2023",
+          "url": "https://www.interior.gob.es/opencms/eu/detalle/articulo/Interior-ha-ejecutado-el-70-por-ciento-de-su-Plan-de-Infraestructuras-dos-anos-antes-de-su-finalizacion/"
+        },
+        {
+          "nombre": "Salamanca RTV al Día",
+          "fecha": "02/10/2023",
+          "url": "https://salamancartvaldia.es/noticia/2023-10-02-nuevo-cuartel-de-la-guardia-civil-en-santa-marta-de-tormes-331334"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "Las 24 viviendas anunciadas como parte de una fase pendiente en 2025 no se consideran existentes."
+    },
+    {
+      "municipio": "Tordesillas",
+      "provincia": "Valladolid",
+      "status": "confirmed",
+      "cuartel": "Casa Cuartel de la Guardia Civil de Tordesillas, zona de los Dominicos",
+      "existencia": "Existente; el artículo indica que la Casa Cuartel se terminó de construir en 1983 y que allí residen agentes, mandos y familias destinados en la localidad.",
+      "tipo_cantidad": "Cantidad de pabellones o viviendas no indicada; total no acreditado.",
+      "restriccion": "No consta.",
+      "evidencia": "La fuente afirma que el personal destinado en la localidad reside en la Casa Cuartel.",
+      "fuentes": [
+        {
+          "nombre": "Tribuna de Valladolid",
+          "fecha": "2024-05-19",
+          "url": "https://www.tribunavalladolid.com/noticias/368180/el-viejo-cuartel-de-la-guardia-civil-en-tordesillas"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La fuente no cuantifica pabellones o viviendas."
+    },
+    {
+      "municipio": "Zaragoza",
+      "provincia": "Zaragoza",
+      "status": "confirmed",
+      "cuartel": "Acuartelamiento de la Guardia Civil de Zaragoza (Valdespartera)",
+      "existencia": "Viviendas para guardias civiles acreditadas en un acuartelamiento inaugurado en 2025.",
+      "tipo_cantidad": "Cantidad no indicada; total no acreditado.",
+      "restriccion": "No consta.",
+      "evidencia": "Noticia sobre la inauguración del nuevo acuartelamiento; menciona expresamente viviendas para guardias civiles.",
+      "fuentes": [
+        {
+          "nombre": "Aragón Digital",
+          "fecha": "22/09/2025",
+          "url": "https://www.aragondigital.es/articulo/zaragoza/zaragoza-tiene-nuevo-acuartelamiento-guardia-civil-invertir-36-millones-euros/20250922142204943266.html"
+        }
+      ],
+      "disponibilidad": "No verificada. Consultar la unidad o comandancia sobre habitabilidad, vacantes de alojamiento, lista de espera y requisitos de adjudicación.",
+      "nota": "La fuente no especifica número de viviendas ni condiciones de adjudicación."
+    }
+  ]
+}
