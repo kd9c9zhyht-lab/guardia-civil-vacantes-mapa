@@ -28,3 +28,14 @@ El proceso valida los campos básicos y las URLs, comprueba la sintaxis del cód
 - **Pruebas:** comprobar filtros combinados, círculos y cuadrados, las dos gráficas, fuentes, favoritos, direcciones guardadas, exportación HTML/CSV y tamaños de escritorio y móvil.
 
 La publicación se realiza en la rama `main` del sitio existente de GitHub Pages. No es necesario modificar el dashboard independiente.
+
+## Inventario oficial de 2017 (dato histórico)
+
+Es una capa separada de las confirmaciones actuales. En el mapa se marca con un contorno discontinuo, tiene su propio interruptor en el panel izquierdo y aparece en el popup como «Dato histórico · 2017», debajo de la ficha de vivienda actual.
+
+- **Fuente:** [respuesta del Gobierno al Congreso de 06/10/2017](https://www.congreso.es/entradap/l12p/e5/e_0050224_n_000.pdf), con 2.097 unidades y 33.843 pabellones. Los subtotales provinciales cuadran con el cuadro oficial, salvo en inhabitables: la suma provincial es 1.828 y la fila TOTAL del documento indica 534.
+- **Clasificación:** [Orden General 5/2005, art. 5 y anexo I](https://www.pactiolegal.es/wp-content/uploads/2023/09/004-Orden-General-num.-5-de-19-de-mayo-de-2005-sobre-regulacion-de-pabellones-oficiales-de-la-Guardia-Civil.pdf). De cada unidad se restan sus pabellones de cargo: Comandante de Puesto (uno por puesto, aunque figure en varias filas), Jefe de Comandancia, Coronel Jefe de Zona, Jefe de Tráfico, Director de centro o Jefe de unidad con cupo propio. Se excluyen las academias de oficiales y los puestos cuyo único pabellón es el de cargo.
+- **Límite:** el anexo no desglosa los grupos de pabellones de unidad (oficiales, suboficiales, y cabos y guardias). La cifra «C. y G.» es por tanto un máximo, no un recuento exacto.
+- **Cruce:** primero por nombre de la unidad que tiene la vacante y después por municipio, más una tabla manual de equivalencias revisada (por ejemplo JATIVA → Xàtiva). Solo se marcan municipios con vacantes 2026 positivas.
+
+Archivos: `datos/inventario_2017_anexo_unidades.json` (anexo transcrito), `datos/inventario_2017_provincias.json` (cuadro provincial), `datos/pabellones_inventario_2017.json` (clasificado y cruzado). Para regenerarlos: `node scripts/classify-inventario-2017.mjs && node scripts/build-housing.mjs`.

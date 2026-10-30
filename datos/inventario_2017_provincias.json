@@ -1,0 +1,262 @@
+{
+ "Albacete": {
+  "existentes": 460,
+  "inhabitables": 14,
+  "ocupados": 305
+ },
+ "Alicante": {
+  "existentes": 638,
+  "inhabitables": 48,
+  "ocupados": 501
+ },
+ "Almería": {
+  "existentes": 603,
+  "inhabitables": 15,
+  "ocupados": 519
+ },
+ "Araba/Álava": {
+  "existentes": 227,
+  "inhabitables": 1,
+  "ocupados": 210
+ },
+ "Asturias": {
+  "existentes": 999,
+  "inhabitables": 105,
+  "ocupados": 709
+ },
+ "Ávila": {
+  "existentes": 370,
+  "inhabitables": 9,
+  "ocupados": 294
+ },
+ "Badajoz": {
+  "existentes": 1130,
+  "inhabitables": 92,
+  "ocupados": 690
+ },
+ "Illes Balears": {
+  "existentes": 562,
+  "inhabitables": 50,
+  "ocupados": 395
+ },
+ "Barcelona": {
+  "existentes": 1221,
+  "inhabitables": 34,
+  "ocupados": 938
+ },
+ "Bizkaia": {
+  "existentes": 348,
+  "inhabitables": null,
+  "ocupados": 329
+ },
+ "Burgos": {
+  "existentes": 445,
+  "inhabitables": 6,
+  "ocupados": 347
+ },
+ "Cáceres": {
+  "existentes": 820,
+  "inhabitables": 78,
+  "ocupados": 548
+ },
+ "Cádiz": {
+  "existentes": 1187,
+  "inhabitables": 136,
+  "ocupados": 945
+ },
+ "Cantabria": {
+  "existentes": 526,
+  "inhabitables": 16,
+  "ocupados": 469
+ },
+ "Castellón": {
+  "existentes": 615,
+  "inhabitables": 23,
+  "ocupados": 523
+ },
+ "Ciudad de Ceuta": {
+  "existentes": 110,
+  "inhabitables": null,
+  "ocupados": 110
+ },
+ "Ciudad Real": {
+  "existentes": 765,
+  "inhabitables": 47,
+  "ocupados": 433
+ },
+ "Córdoba": {
+  "existentes": 644,
+  "inhabitables": 74,
+  "ocupados": 431
+ },
+ "Cuenca": {
+  "existentes": 481,
+  "inhabitables": 4,
+  "ocupados": 356
+ },
+ "Girona": {
+  "existentes": 450,
+  "inhabitables": 70,
+  "ocupados": 254
+ },
+ "Granada": {
+  "existentes": 887,
+  "inhabitables": 45,
+  "ocupados": 702
+ },
+ "Guadalajara": {
+  "existentes": 478,
+  "inhabitables": 20,
+  "ocupados": 410
+ },
+ "Gipuzkoa": {
+  "existentes": 520,
+  "inhabitables": 14,
+  "ocupados": 493
+ },
+ "Huelva": {
+  "existentes": 630,
+  "inhabitables": 14,
+  "ocupados": 548
+ },
+ "Huesca": {
+  "existentes": 705,
+  "inhabitables": 37,
+  "ocupados": 539
+ },
+ "Jaén": {
+  "existentes": 854,
+  "inhabitables": 112,
+  "ocupados": 483
+ },
+ "A Coruña": {
+  "existentes": 565,
+  "inhabitables": 40,
+  "ocupados": 414
+ },
+ "La Rioja": {
+  "existentes": 465,
+  "inhabitables": 18,
+  "ocupados": 397
+ },
+ "Las Palmas": {
+  "existentes": 462,
+  "inhabitables": 13,
+  "ocupados": 430
+ },
+ "León": {
+  "existentes": 593,
+  "inhabitables": 39,
+  "ocupados": 433
+ },
+ "Lleida": {
+  "existentes": 391,
+  "inhabitables": 14,
+  "ocupados": 239
+ },
+ "Lugo": {
+  "existentes": 597,
+  "inhabitables": 2,
+  "ocupados": 389
+ },
+ "Madrid": {
+  "existentes": 3029,
+  "inhabitables": 85,
+  "ocupados": 2819
+ },
+ "Málaga": {
+  "existentes": 897,
+  "inhabitables": 19,
+  "ocupados": 713
+ },
+ "Ciudad de Melilla": {
+  "existentes": 203,
+  "inhabitables": null,
+  "ocupados": 201
+ },
+ "Murcia": {
+  "existentes": 564,
+  "inhabitables": 47,
+  "ocupados": 448
+ },
+ "Navarra": {
+  "existentes": 844,
+  "inhabitables": 5,
+  "ocupados": 683
+ },
+ "Ourense": {
+  "existentes": 389,
+  "inhabitables": 23,
+  "ocupados": 253
+ },
+ "Palencia": {
+  "existentes": 397,
+  "inhabitables": 21,
+  "ocupados": 262
+ },
+ "Pontevedra": {
+  "existentes": 492,
+  "inhabitables": 21,
+  "ocupados": 381
+ },
+ "Salamanca": {
+  "existentes": 378,
+  "inhabitables": 33,
+  "ocupados": 227
+ },
+ "Segovia": {
+  "existentes": 407,
+  "inhabitables": 20,
+  "ocupados": 306
+ },
+ "Sevilla": {
+  "existentes": 1234,
+  "inhabitables": 66,
+  "ocupados": 974
+ },
+ "Soria": {
+  "existentes": 331,
+  "inhabitables": 23,
+  "ocupados": 233
+ },
+ "Sta. Cruz Tenerife": {
+  "existentes": 494,
+  "inhabitables": 2,
+  "ocupados": 463
+ },
+ "Tarragona": {
+  "existentes": 449,
+  "inhabitables": 31,
+  "ocupados": 307
+ },
+ "Teruel": {
+  "existentes": 420,
+  "inhabitables": 2,
+  "ocupados": 310
+ },
+ "Toledo": {
+  "existentes": 932,
+  "inhabitables": 46,
+  "ocupados": 703
+ },
+ "Valencia": {
+  "existentes": 1104,
+  "inhabitables": 45,
+  "ocupados": 951
+ },
+ "Valladolid": {
+  "existentes": 366,
+  "inhabitables": 22,
+  "ocupados": 245
+ },
+ "Zamora": {
+  "existentes": 489,
+  "inhabitables": 75,
+  "ocupados": 281
+ },
+ "Zaragoza": {
+  "existentes": 676,
+  "inhabitables": 52,
+  "ocupados": 510
+ }
+}
